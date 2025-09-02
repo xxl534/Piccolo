@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <unordered_map>
 
 namespace Piccolo
 {
@@ -25,6 +26,7 @@ namespace Piccolo
         const std::string& getDefaultWorldUrl() const;
         const std::string& getGlobalRenderingResUrl() const;
         const std::string& getGlobalParticleResUrl() const;
+        const std::string& get(const std::string& name) const;
 
     private:
         std::filesystem::path m_root_folder;
@@ -41,5 +43,6 @@ namespace Piccolo
         std::string m_default_world_url;
         std::string m_global_rendering_res_url;
         std::string m_global_particle_res_url;
+        std::unordered_map<std::string, std::string> m_value_map;
     };
 } // namespace Piccolo

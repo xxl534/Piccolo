@@ -1,6 +1,8 @@
 #include "runtime/resource/config_manager/config_manager.h"
 
 #include "runtime/engine.h"
+#include "runtime/core/extensions/unordered_map_extensions.h"
+#include "runtime/core/extensions/string_extensions.h"
 
 #include <filesystem>
 #include <fstream>
@@ -20,6 +22,7 @@ namespace Piccolo
             {
                 std::string name  = config_line.substr(0, seperate_pos);
                 std::string value = config_line.substr(seperate_pos + 1, config_line.length() - seperate_pos - 1);
+                m_value_map[name] = value;
                 if (name == "BinaryRootFolder")
                 {
                     m_root_folder = config_file_path.parent_path() / value;
@@ -83,6 +86,10 @@ namespace Piccolo
     const std::string& ConfigManager::getGlobalRenderingResUrl() const { return m_global_rendering_res_url; }
 
     const std::string& ConfigManager::getGlobalParticleResUrl() const { return m_global_particle_res_url; }
+
+    const std::string& ConfigManager::get(const std::string& name) const{
+        return UnorderedMapExtensions::getOrDefault(m_value_map, name, StringExtensions::emptyString);
+    }
 
 #ifdef ENABLE_PHYSICS_DEBUG_RENDERER
     const std::filesystem::path& ConfigManager::getJoltPhysicsAssetFolder() const { return m_jolt_physics_asset_folder; }
