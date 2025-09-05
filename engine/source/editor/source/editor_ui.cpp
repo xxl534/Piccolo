@@ -272,6 +272,7 @@ namespace Piccolo
         showEditorGameWindow(&m_game_engine_window_open);
         showEditorFileContentWindow(&m_file_content_window_open);
         showEditorDetailWindow(&m_detail_window_open);
+        showEditorInspectorWindow(&m_inspector_window_open);
     }
 
     void EditorUI::showEditorMenu(bool* p_open)
@@ -305,6 +306,8 @@ namespace Piccolo
             ImGuiID center = main_docking_id;
             ImGuiID left;
             ImGuiID right = ImGui::DockBuilderSplitNode(center, ImGuiDir_Right, 0.25f, nullptr, &left);
+            ImGuiID right_lower;
+            ImGuiID right_upper = ImGui::DockBuilderSplitNode(right, ImGuiDir_Up, 0.5f, nullptr, &right_lower);
 
             ImGuiID left_other;
             ImGuiID left_file_content = ImGui::DockBuilderSplitNode(left, ImGuiDir_Down, 0.30f, nullptr, &left_other);
@@ -314,7 +317,8 @@ namespace Piccolo
                 ImGui::DockBuilderSplitNode(left_other, ImGuiDir_Left, 0.30f, nullptr, &left_game_engine);
 
             ImGui::DockBuilderDockWindow("World Objects", left_asset);
-            ImGui::DockBuilderDockWindow("Components Details", right);
+            ImGui::DockBuilderDockWindow("Components Details", right_upper);
+            ImGui::DockBuilderDockWindow("Inspector", right_lower);
             ImGui::DockBuilderDockWindow("File Content", left_file_content);
             ImGui::DockBuilderDockWindow("Game Engine", left_game_engine);
 
@@ -382,6 +386,7 @@ namespace Piccolo
                 ImGui::MenuItem("Game", nullptr, &m_game_engine_window_open);
                 ImGui::MenuItem("File Content", nullptr, &m_file_content_window_open);
                 ImGui::MenuItem("Detail", nullptr, &m_detail_window_open);
+                ImGui::MenuItem("Inspector", nullptr, &m_inspector_window_open);
                 ImGui::EndMenu();
             }
             ImGui::EndMenuBar();
@@ -570,6 +575,21 @@ namespace Piccolo
         }
         ImGui::End();
     }
+
+    void EditorUI::showEditorInspectorWindow(bool* p_open)
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+        
+        if (!*p_open)
+            return;
+            
+        if (!ImGui::Begin("Inspector", p_open, window_flags))
+        {
+            ImGui::End();
+            return;
+        }
+        ImGui::End();
+    }   
 
     void EditorUI::showEditorFileContentWindow(bool* p_open)
     {
