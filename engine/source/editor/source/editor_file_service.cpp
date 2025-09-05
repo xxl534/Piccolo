@@ -68,6 +68,7 @@ namespace Piccolo
             node_array.clear();
             node_array.push_back(root_node);
             int file_segment_count = all_file_segments[file_index].size();
+            std::filesystem::path file_path = "";
             for (int file_segment_index = 0; file_segment_index < file_segment_count; file_segment_index++)
             {
                 auto file_node         = std::make_shared<EditorFileNode>();
@@ -75,6 +76,8 @@ namespace Piccolo
                 if (depth < file_segment_count - 1)
                 {
                     file_node->m_file_type = "Folder";
+                    file_path += '/' + file_node->m_file_name;
+					file_node->m_file_path = file_path.generic_string();
                 }
                 else
                 {
@@ -117,8 +120,7 @@ namespace Piccolo
         int editor_node_count = m_file_node_array.size();
         for (int file_node_index = 0; file_node_index < editor_node_count; file_node_index++)
         {
-            if (m_file_node_array[file_node_index]->m_file_name == file_node->m_file_name &&
-                m_file_node_array[file_node_index]->m_node_depth == file_node->m_node_depth)
+            if (m_file_node_array[file_node_index]->m_file_path == file_node->m_file_path)
             {
                 return true;
             }
@@ -131,8 +133,7 @@ namespace Piccolo
         int editor_node_count = m_file_node_array.size();
         for (int file_node_index = 0; file_node_index < editor_node_count; file_node_index++)
         {
-            if (m_file_node_array[file_node_index]->m_file_name == file_node->m_file_name &&
-                m_file_node_array[file_node_index]->m_node_depth == file_node->m_node_depth)
+            if (m_file_node_array[file_node_index]->m_file_path == file_node->m_file_path)
             {
                 return m_file_node_array[file_node_index].get();
             }
